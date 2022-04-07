@@ -27,7 +27,7 @@ const Board = () => {
         [null, null, null, null, null, null, null, null, null, null], // row G
         [null, null, null, null, null, null, null, null, null, null], // row H
         [null, null, null, null, null, null, null, null, null, null], // row I
-        [null, null, null, null, null, null, null, null, null, null]  // row AJ
+        [null, null, null, null, null, null, null, null, null, null]  // row J
     ];
     function reportCoordinateValue(yCoordinate, xCoordinate) {
         let coordinateValue = board[yCoordinate][xCoordinate];
@@ -35,11 +35,15 @@ const Board = () => {
     };
     function placeBoat(yCoordinate, xCoordinate, boat, isVertical) {
         if (isVertical) {
+            let remainingVerticalSpace = board.length - (yCoordinate);
+            if (remainingVerticalSpace < boat.hull.length) {return "Insufficient space"};
             for (let i = 0; i < boat.hull.length; i++) {
                 board[yCoordinate + i][xCoordinate ] = boat.hull[i];
             };
         };
         if (!isVertical) {
+            let remainingHorizontalSpace = board[yCoordinate].length - (xCoordinate);
+            if (remainingHorizontalSpace < boat.hull.length) {return "Insufficient space"};
             for (let i = 0; i < boat.hull.length; i++) {
                 board[yCoordinate][xCoordinate + i] = boat.hull[i];
             };

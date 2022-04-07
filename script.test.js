@@ -1,11 +1,11 @@
 import { Board, Ship } from "./script.js"
 
-test("Returns value of specified coordinate", () => {
+test("Boards can return value of specified coordinate", () => {
     const playerboard = Board();
     expect(playerboard.reportCoordinateValue(0, 0)).toBeNull();
 });
 
-test("Changes values of the board's target coordinate key in the horizontal direction", () => {
+test("placeBoat() can change values of the board's target coordinate key in the horizontal direction", () => {
     let boat = Ship(4);
     let board = Board();
     board.placeBoat(0, 0, boat, false);
@@ -15,7 +15,14 @@ test("Changes values of the board's target coordinate key in the horizontal dire
     expect(board.reportCoordinateValue(0, 3)).toEqual(boat.hull[3]);
 });
 
-test("Changes values of the board's target coordinate key in the vertical direction", () => {
+test("placeBoat() will check if a boat will fit in specified coordinates before changing board values", () => {
+    let boat = Ship(5);
+    let board = Board();
+    expect(board.placeBoat(0, 7, boat, false)).toEqual("Insufficient space");
+    expect(board.placeBoat(6, 7, boat, true)).toEqual("Insufficient space");
+});
+
+test("placeBoat() can change values of the board's target coordinate key in the vertical direction", () => {
     let boat = Ship(4);
     let board = Board();
     board.placeBoat(0, 0, boat, true);
