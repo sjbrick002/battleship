@@ -6,7 +6,6 @@ const factory = (() => {
         };
         function hit(hullIndex) {
             hull[hullIndex] = 1;
-            return hull[hullIndex];
         };
         function isSunk() {
             let damage = hull.reduce((prev, current) => prev + current, 0);
@@ -29,63 +28,48 @@ const factory = (() => {
             [{beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}], // row I
             [{beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}, {beenAttacked: false, asset: null}]  // row J
         ];
-        function reportCoordinateValue(yCoordinate, xCoordinate) {
+        function reportCoordinateAsset(yCoordinate, xCoordinate) {
             let coordinateValue = board[yCoordinate][xCoordinate].asset;
             return coordinateValue;
         };
-        function placeBoat(yCoordinate, xCoordinate, boat, isVertical) {
+        function placeBoat(yCoordinate, xCoordinate, ship, isVertical) {
             if (isVertical) {
                 let remainingVerticalSpace = board.length - (yCoordinate);
-                if (remainingVerticalSpace < boat.hull.length) {return "Insufficient space"};
-                for (let i = 0; i < boat.hull.length; i++) {
+                if (remainingVerticalSpace < ship.hull.length) {return "Insufficient space"};
+                for (let i = 0; i < ship.hull.length; i++) {
                     if (board[yCoordinate + i][xCoordinate].asset !== null) {return "There is already a ship there!"};
                 };
-                for (let i = 0; i < boat.hull.length; i++) {
-                    board[yCoordinate + i][xCoordinate].asset = [boat, i];
+                for (let i = 0; i < ship.hull.length; i++) {
+                    board[yCoordinate + i][xCoordinate].asset = [ship, i];
                 };
             };
             if (!isVertical) {
                 let remainingHorizontalSpace = board[yCoordinate].length - (xCoordinate);
-                if (remainingHorizontalSpace < boat.hull.length) {return "Insufficient space"};
-                for (let i = 0; i < boat.hull.length; i++) {
+                if (remainingHorizontalSpace < ship.hull.length) {return "Insufficient space"};
+                for (let i = 0; i < ship.hull.length; i++) {
                     if (board[yCoordinate][xCoordinate + i].asset !== null) {return "There is already a ship there!"};
                 };
-                for (let i = 0; i < boat.hull.length; i++) {
-                    board[yCoordinate][xCoordinate + i].asset = [boat, i];
+                for (let i = 0; i < ship.hull.length; i++) {
+                    board[yCoordinate][xCoordinate + i].asset = [ship, i];
                 };
             };
         };
-        function checkAttacked(yCoordinate, xCoordinate) {
-            return board[yCoordinate][xCoordinate].beenAttacked;
-        };
         function targetCoordinate(yCoordinate, xCoordinate) {
-            if (!checkAttacked(yCoordinate, xCoordinate)) {
+            if (!board[yCoordinate][xCoordinate].beenAttacked) {
                 board[yCoordinate][xCoordinate].beenAttacked = true;
-                let asset = reportCoordinateValue(yCoordinate, xCoordinate);
+                let asset = reportCoordinateAsset(yCoordinate, xCoordinate);
                 if (asset !== null) {
-                    asset[0].Hit(asset[1]);
+                    asset[0].hit(asset[1]);
                     return asset[0].isSunk();
                 };
                 return asset;
             }; 
         };
-        return { reportCoordinateValue, placeBoat, checkAttacked, targetCoordinate };
+        return { reportCoordinateAsset, placeBoat, targetCoordinate };
     };
-
-    const Player = () => {
-        const carrier = Ship(5);
-        const battleship = Ship(4);
-        const cruiser = Ship(3);
-        const submarine = Ship(3);
-        const destroyer = Ship(2);
-        let fleet = [carrier, battleship, cruiser, submarine, destroyer, Ship(0)];
-        function loseShip() {
-            let currentFleet = fleet.filter(ship => !ship.isSunk());
-            return currentFleet;
-        };
-        return { fleet, loseShip };
-    };
-    return { Board, Ship, Player };
+    return { Board, Ship };
 })();
+
+
 
 export { factory };
