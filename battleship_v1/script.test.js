@@ -68,14 +68,23 @@ test("Ship object returns an array with a length based off ship hitpoints", () =
 });
 
 test("Ship object changes array item value to 1 when hit", () => {
-    expect(factory.Ship(5).Hit(3)).toEqual(1)
+    expect(factory.Ship(5).hit(3)).toEqual(1)
 });
 
 test("Ship object checks if ship has sunk", () => {
-    expect(factory.Ship(5).isSunk()).toBeFalsy();
+    const ship = factory.Ship(2);
+    expect(ship.isSunk()).toBeFalsy();
+    ship.hit(0);
+    ship.hit(1);
+    expect(ship.isSunk()).toBeTruthy();
 });
 
 test("Player fleet starts out with 5 ships", () => {
     const player = factory.Player();
-    expect(player.fleet.length).toEqual(5);
+    expect(player.fleet.length).toEqual(6);
+});
+
+test("Player fleet loses ship when isSunk reports true", () => {
+    let player = factory.Player();
+    expect(player.loseShip().length).toEqual(5);
 });

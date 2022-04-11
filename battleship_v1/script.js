@@ -4,7 +4,7 @@ const factory = (() => {
         for (let i = 0; i < hitpoints; i++) {
             hull.push(0);
         };
-        function Hit(hullIndex) {
+        function hit(hullIndex) {
             hull[hullIndex] = 1;
             return hull[hullIndex];
         };
@@ -13,7 +13,7 @@ const factory = (() => {
             if (hitpoints === damage) {return true};
             return false;
         };
-        return {hull, Hit, isSunk}
+        return {hull, hit, isSunk}
     };
     
     const Board = () => {
@@ -72,7 +72,20 @@ const factory = (() => {
         return { reportCoordinateValue, placeBoat, checkAttacked, targetCoordinate };
     };
 
-    return { Board, Ship };
+    const Player = () => {
+        const carrier = Ship(5);
+        const battleship = Ship(4);
+        const cruiser = Ship(3);
+        const submarine = Ship(3);
+        const destroyer = Ship(2);
+        let fleet = [carrier, battleship, cruiser, submarine, destroyer, Ship(0)];
+        function loseShip() {
+            let currentFleet = fleet.filter(ship => !ship.isSunk());
+            return currentFleet;
+        };
+        return { fleet, loseShip };
+    };
+    return { Board, Ship, Player };
 })();
 
 export { factory };
