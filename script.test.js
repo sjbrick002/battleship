@@ -1,4 +1,4 @@
-import { factory } from "./script.js"
+import { factory, gamePlay } from "./script.js"
 
 describe("Ship constructor tests", () => {
     test("Ship object returns an array with a length based off ship hitpoints", () => {
@@ -88,5 +88,11 @@ describe("Board constructor tests", () => {
         expect(board.targetCoordinate(3, 3)).toEqual(false);
         expect(destroyer.hull[1]).toEqual(1);
         expect(board.targetCoordinate(3, 2)).toEqual(true);
+    });
+});
+
+describe("Player interaction tests", () => {
+    test("attack() returns 'miss' when given coordinates a ship does not exist in", () => {
+        expect(gamePlay.attack(0, 0)).toEqual("miss");
     });
 });

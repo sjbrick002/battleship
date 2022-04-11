@@ -42,6 +42,7 @@ const factory = (() => {
                 for (let i = 0; i < ship.hull.length; i++) {
                     board[yCoordinate + i][xCoordinate].asset = [ship, i];
                 };
+                return "success";
             };
             if (!isVertical) {
                 let remainingHorizontalSpace = board[yCoordinate].length - (xCoordinate);
@@ -52,6 +53,7 @@ const factory = (() => {
                 for (let i = 0; i < ship.hull.length; i++) {
                     board[yCoordinate][xCoordinate + i].asset = [ship, i];
                 };
+                return "success";
             };
         };
         function targetCoordinate(yCoordinate, xCoordinate) {
@@ -67,9 +69,44 @@ const factory = (() => {
         };
         return { reportCoordinateAsset, placeBoat, targetCoordinate };
     };
-    return { Board, Ship };
+
+    const Player = () => {
+        const board = Board();
+        const carrier = Ship(5);
+        const battleship = Ship(4);
+        const cruiser = Ship(3);
+        const submarine = Ship(3);
+        const destroyer = Ship(2);
+        const fleet = [carrier, battleship, cruiser, submarine, destroyer];
+        const fleetGraveyard = [];
+        function setFleet() {
+            fleet.forEach(ship => {
+                let i = 0
+                while (i < fleet.length) {
+                    let y = prompt("enter y coordinate");
+                    let x = prompt("enter x coordinate");
+                    vertical = prompt("enter ship's orientation") ? true : false;
+                    let placementStatus = board.placeBoat(y, x, ship, vertical);
+                    if (placementStatus === "success") {i++}
+                    else {alert(placementStatus)};
+                };
+            })
+        };
+        function receiveAttack(xCoordinate, yCoordinate) {
+            const attackResult = board.targetCoordinate(xCoordinate, yCoordinate);
+            return attackResult;
+        };
+        return {setFleet, receiveAttack}
+    };
+    return { Board, Ship, Player };
 })();
 
+const gamePlay = (() => {
+    const player = factory.Player();
+    function attack(yCoordinate, xCoordinate) {
+        if (player.receiveAttack(xCoordinate, yCoordinate) === null) {return "miss"};
+    };
+    return {attack};
+})();
 
-
-export { factory };
+export { factory, gamePlay };
