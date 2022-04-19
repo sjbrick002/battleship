@@ -60,7 +60,7 @@ const factory = (() => {
             if (!board[yCoordinate][xCoordinate].beenAttacked) {
                 board[yCoordinate][xCoordinate].beenAttacked = true;
                 let asset = reportCoordinateAsset(yCoordinate, xCoordinate);
-                if (asset !== null) {
+                if (asset) {
                     asset[0].hit(asset[1]);
                     return asset[0].isSunk();
                 };
@@ -78,35 +78,51 @@ const factory = (() => {
         const submarine = Ship(3);
         const destroyer = Ship(2);
         const fleet = [carrier, battleship, cruiser, submarine, destroyer];
-        const fleetGraveyard = [];
-        function setFleet() {
-            fleet.forEach(ship => {
-                let i = 0
-                while (i < fleet.length) {
-                    let y = prompt("enter y coordinate");
-                    let x = prompt("enter x coordinate");
-                    vertical = prompt("enter ship's orientation") ? true : false;
-                    let placementStatus = board.placeBoat(y, x, ship, vertical);
-                    if (placementStatus === "success") {i++}
-                    else {alert(placementStatus)};
-                };
-            })
+        let i = 0
+        function setShip(yCoordinate, xCoordinate, isVertical) {
+            if (i < fleet.length) {
+                let result = board.placeBoat(yCoordinate, xCoordinate, fleet[i], isVertical);
+                if (result === "success") {i++};
+                return result;
+            };
         };
-        function receiveAttack(xCoordinate, yCoordinate) {
-            const attackResult = board.targetCoordinate(xCoordinate, yCoordinate);
+        function receiveAttack(yCoordinate, xCoordinate) {
+            const attackResult = board.targetCoordinate(yCoordinate, xCoordinate);
             return attackResult;
         };
-        return {setFleet, receiveAttack}
+        function isFleetDead() {
+            let fleetGraveyard = fleet.filter(ship => ship.isSunk());
+            if (fleetGraveyard.length === fleet.length) {return true};
+            return false;
+
+        };
+        return {setShip, receiveAttack, isFleetDead};
     };
     return { Board, Ship, Player };
 })();
 
 const gamePlay = (() => {
-    const player = factory.Player();
-    function attack(yCoordinate, xCoordinate) {
-        if (player.receiveAttack(xCoordinate, yCoordinate) === null) {return "miss"};
+
+    function attack(yCoordinate, xCoordinate, target) {
+        const attackResult = target.receiveAttack(yCoordinate, xCoordinate);
+        //targetIndex = (targetIndex) ? 0 : 1;
+        if (attackResult === null) {
+            return "miss";
+        };
+        if (attackResult === false) {
+            return "hit";
+        };
+        if (attackResult === true) {
+            return "sunk";
+        };
     };
-    return {attack};
+    function checkWinner(playersArray) {
+        const playerLost = playersArray[1].isFleetDead();
+        const computerLost = playersArray[0].isFleetDead();
+        if (computerLost) {return "Player wins!"};
+        if (playerLost) {return "Computer wins!"};
+    };
+    return {attack, checkWinner};
 })();
 
 export { factory, gamePlay };
