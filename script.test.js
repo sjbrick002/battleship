@@ -34,7 +34,7 @@ describe("Board factory function tests", () => {
         expect(board.reportCoordinateAsset(0, 0)).toBeNull();
     });
 
-    test("Board().reportCoordinateAsset() will return an array of a ship and its hull section index number if a ship has been placed at coordinates", () => {
+    test("Board().reportCoordinateAsset() will return an array of a ship object and its hull section index number if a ship has been placed at coordinates", () => {
         const board = factory.Board();
         const destroyer = factory.Ship(2);
         board.placeBoat(0, 0, destroyer, true);
@@ -81,7 +81,7 @@ describe("Board factory function tests", () => {
         expect(board.targetCoordinate(0, 0)).toEqual(undefined);
     });
     
-    test("Board().targetCoordinate() upon a hit will call appropriate ship's Hit() function and check if the damaged ship is sunk", () => {
+    test("Board().targetCoordinate() upon a hit will call appropriate ship's Hit() function and check if the damaged ship is sunk returning true or false based on the ship's status", () => {
         let board = factory.Board();
         let destroyer = factory.Ship(2);
         board.placeBoat(3, 2, destroyer, false);
@@ -170,16 +170,38 @@ describe("Player factory function tests", () => {
 });
 
 describe("Player interaction tests", () => {
-    test.skip("attack() returns 'miss' when given coordinates a ship does not exist in", () => {
-        expect(gamePlay.attack(0, 0)).toEqual("miss");
+    test("attack() returns 'miss' when given coordinates a ship does not exist in", () => {
+        const player = factory.Player();
+        expect(player.attack(0,0,player)).toEqual("miss");
     });
 
-    test.skip("attack() returns 'hit' when given coordinates a ship exists in", () => {
-        expect(gamePlay.attack(0,4)).toEqual("hit");
+    test("attack() returns 'hit' when given coordinates a ship exists in", () => {
+        const player = factory.Player();
+        player.setShip(0,4,false);
+        expect(player.attack(0,4,player)).toEqual("hit");
     });
 
-    // The following three tests seem to leak their history into the last two test in this section. This makes me believe that there is some sort of continuity between tests that I have accidently stumbled across somehow that I will need to research. Another idea I have as to what the root of the problem could be is that the gamePlay object may not produce seperate instances when called upon which could explain this unexpected conituity between tests. I will try to read up for on factory function design and closure along with jest documentation...
-    test.skip("attack() returns 'sunk' when given coordinates a ship exists in where isSunk() returns true", () => {
+    test("attack() returns 'sunk' when given coordinates a ship exists in where isSunk() returns true", () => {
+        const computer = factory.Player();
+        const player = factory.Player();
+        //DUMMY CONTENT
+        computer.setShip(0,4,false);
+        computer.setShip(2,2,true);
+        computer.setShip(4,5,false);
+        computer.setShip(9,0,false);
+        computer.setShip(7,6,true);
+        player.setShip(0,4,false);
+        player.setShip(2,2,true);
+        player.setShip(4,5,false);
+        player.setShip(9,0,false);
+        player.setShip(7,6,true);
+        //
+        player.attack(7,6,computer);
+        computer.attack(0,0,player);
+        expect(player.attack(8,6,computer)).toEqual("sunk");
+    });
+
+    test("checkWinner() will return 'Player wins!' if computer.isFleetDead() returns true but player.isFleetDead() returns false", () => {
         const computer = factory.Player();
         const player = factory.Player();
         const players = [computer, player];
@@ -195,71 +217,46 @@ describe("Player interaction tests", () => {
         player.setShip(9,0,false);
         player.setShip(7,6,true);
         //
-        gamePlay.attack(7,6,computer);
-        gamePlay.attack(0,0,player);
-        expect(gamePlay.attack(8,6,computer)).toEqual("sunk");
-    });
-
-    test("checkWinner() will return 'Player wins!' if computer.isFleetDead() returns true but player.isFleetDead() returns false", () => {
-        const computer = factory.Player();
-        const player = factory.Player();
-        const players = [computer, player]
-        let targetIndex = 0
-        let target = players[targetIndex];
-        //DUMMY CONTENT
-        computer.setShip(0,4,false);
-        computer.setShip(2,2,true);
-        computer.setShip(4,5,false);
-        computer.setShip(9,0,false);
-        computer.setShip(7,6,true);
-        player.setShip(0,4,false);
-        player.setShip(2,2,true);
-        player.setShip(4,5,false);
-        player.setShip(9,0,false);
-        player.setShip(7,6,true);
-        //
-        gamePlay.attack(0,4,computer);
-        gamePlay.attack(0,4,player);
-        gamePlay.attack(0,5,computer);
-        gamePlay.attack(0,5,player);
-        gamePlay.attack(0,6,computer);
-        gamePlay.attack(0,6,player);
-        gamePlay.attack(0,7,computer);
-        gamePlay.attack(0,7,player);
-        gamePlay.attack(0,8,computer);
-        gamePlay.attack(0,8,player);
-        gamePlay.attack(2,2,computer);
-        gamePlay.attack(2,2,player);
-        gamePlay.attack(3,2,computer);
-        gamePlay.attack(3,2,player);
-        gamePlay.attack(4,2,computer);
-        gamePlay.attack(4,2,player);
-        gamePlay.attack(5,2,computer);
-        gamePlay.attack(5,2,player);
-        gamePlay.attack(4,5,computer);
-        gamePlay.attack(4,5,player);
-        gamePlay.attack(4,6,computer);
-        gamePlay.attack(4,6,player);
-        gamePlay.attack(4,7,computer);
-        gamePlay.attack(4,7,player);
-        gamePlay.attack(9,0,computer);
-        gamePlay.attack(9,0,player);
-        gamePlay.attack(9,1,computer);
-        gamePlay.attack(9,1,player);
-        gamePlay.attack(9,2,computer);
-        gamePlay.attack(9,2,player);
-        gamePlay.attack(7,6,computer);
-        gamePlay.attack(7,6,player);
-        gamePlay.attack(8,6,computer);
+        player.attack(0,4,computer);
+        computer.attack(0,4,player);
+        player.attack(0,5,computer);
+        computer.attack(0,5,player);
+        player.attack(0,6,computer);
+        computer.attack(0,6,player);
+        player.attack(0,7,computer);
+        computer.attack(0,7,player);
+        player.attack(0,8,computer);
+        computer.attack(0,8,player);
+        player.attack(2,2,computer);
+        computer.attack(2,2,player);
+        player.attack(3,2,computer);
+        computer.attack(3,2,player);
+        player.attack(4,2,computer);
+        computer.attack(4,2,player);
+        player.attack(5,2,computer);
+        computer.attack(5,2,player);
+        player.attack(4,5,computer);
+        computer.attack(4,5,player);
+        player.attack(4,6,computer);
+        computer.attack(4,6,player);
+        player.attack(4,7,computer);
+        computer.attack(4,7,player);
+        player.attack(9,0,computer);
+        computer.attack(9,0,player);
+        player.attack(9,1,computer);
+        computer.attack(9,1,player);
+        player.attack(9,2,computer);
+        computer.attack(9,2,player);
+        player.attack(7,6,computer);
+        computer.attack(7,6,player);
+        player.attack(8,6,computer);
         expect(gamePlay.checkWinner(players)).toEqual("Player wins!");
     });
 
     test("checkWinner() will return 'computer wins!' if computer.isFleetDead() returns false but player.isFleetDead() returns true", () => {
         const computer = factory.Player();
         const player = factory.Player();
-        const players = [computer, player]
-        let targetIndex = 0
-        let target = players[targetIndex];
+        const players = [computer, player];
         //DUMMY CONTENT
         computer.setShip(0,4,false);
         computer.setShip(2,2,true);
@@ -272,40 +269,40 @@ describe("Player interaction tests", () => {
         player.setShip(9,0,false);
         player.setShip(7,6,true);
         //
-        gamePlay.attack(0,4,computer);
-        gamePlay.attack(0,4,player);
-        gamePlay.attack(0,5,computer);
-        gamePlay.attack(0,5,player);
-        gamePlay.attack(0,6,computer);
-        gamePlay.attack(0,6,player);
-        gamePlay.attack(0,7,computer);
-        gamePlay.attack(0,7,player);
-        gamePlay.attack(0,8,computer);
-        gamePlay.attack(0,8,player);
-        gamePlay.attack(2,2,computer);
-        gamePlay.attack(2,2,player);
-        gamePlay.attack(3,2,computer);
-        gamePlay.attack(3,2,player);
-        gamePlay.attack(4,2,computer);
-        gamePlay.attack(4,2,player);
-        gamePlay.attack(5,2,computer);
-        gamePlay.attack(5,2,player);
-        gamePlay.attack(4,5,computer);
-        gamePlay.attack(4,5,player);
-        gamePlay.attack(4,6,computer);
-        gamePlay.attack(4,6,player);
-        gamePlay.attack(4,7,computer);
-        gamePlay.attack(4,7,player);
-        gamePlay.attack(9,0,computer);
-        gamePlay.attack(9,0,player);
-        gamePlay.attack(9,1,computer);
-        gamePlay.attack(9,1,player);
-        gamePlay.attack(9,2,computer);
-        gamePlay.attack(9,2,player);
-        gamePlay.attack(7,6,computer);
-        gamePlay.attack(7,6,player);
-        gamePlay.attack(7,7,computer);
-        gamePlay.attack(8,6,player);
+        player.attack(0,4,computer);
+        computer.attack(0,4,player);
+        player.attack(0,5,computer);
+        computer.attack(0,5,player);
+        player.attack(0,6,computer);
+        computer.attack(0,6,player);
+        player.attack(0,7,computer);
+        computer.attack(0,7,player);
+        player.attack(0,8,computer);
+        computer.attack(0,8,player);
+        player.attack(2,2,computer);
+        computer.attack(2,2,player);
+        player.attack(3,2,computer);
+        computer.attack(3,2,player);
+        player.attack(4,2,computer);
+        computer.attack(4,2,player);
+        player.attack(5,2,computer);
+        computer.attack(5,2,player);
+        player.attack(4,5,computer);
+        computer.attack(4,5,player);
+        player.attack(4,6,computer);
+        computer.attack(4,6,player);
+        player.attack(4,7,computer);
+        computer.attack(4,7,player);
+        player.attack(9,0,computer);
+        computer.attack(9,0,player);
+        player.attack(9,1,computer);
+        computer.attack(9,1,player);
+        player.attack(9,2,computer);
+        computer.attack(9,2,player);
+        player.attack(7,6,computer);
+        computer.attack(7,6,player);
+        player.attack(7,7,computer);
+        computer.attack(8,6,player);
         expect(gamePlay.checkWinner(players)).toEqual("Computer wins!");
     });
 });
