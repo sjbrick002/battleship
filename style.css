@@ -8,11 +8,11 @@
 *, *::before, *::after {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 html {
     font-size: 100%;
-    box-sizing: border-box;
     font-family: monospace;
 }
 
@@ -22,7 +22,6 @@ body {
     font-size: 2.5rem;
     background-color: black;
     color: var(--tech-blue);
-    overflow-x: hidden;
 }
 
 img {
@@ -34,14 +33,13 @@ img {
     width: clamp(600px, 50%, 1200px);
     height: inherit;
     margin: 0 auto;
-    padding: 100px 0;
     background-color: var(--deep-black);
 }
 
 .start-btn {
     width: clamp(400px, 80%, 800px);
-    height: 20vh;
-    margin: 0 10%;
+    height: 20%;
+    margin: 100px 10% 0;
     font-size: 8rem;
     border-top: 5px solid white;
     border-left: 5px solid white;
@@ -88,4 +86,131 @@ img {
 
 .opponent-card:active {
     background-color: rgba(75, 74, 74, 1);
+}
+
+
+.game-panel {
+    width: clamp(860px, 80%, 1600px);
+    height: inherit;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--deep-black);
+    display: flex;
+    justify-content: space-between;
+}
+
+.game-panel-left {
+    width: clamp(350px, 42%, 650px);
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+.player-fleet-display, .enemy-fleet-display {
+    margin-top: 18px;
+    padding: 2px 0;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.player-fleet-display > div, .enemy-fleet-display > div {
+    margin: 0 16px;
+    display: flex;
+}
+
+.ship-hull-block {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    margin: 2px;
+    background-color: var(--spaceship-white);
+}
+
+.home-board, .targeting-board {
+    margin: 0 10%;
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    grid-template-rows: 1fr 10fr;
+}
+
+.home-board-number-coordinates, .targeting-board-number-coordinates {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    justify-items: center;
+    align-items: center;
+}
+
+.home-board-letter-coordinates, .targeting-board-letter-coordinates {
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    justify-items: center;
+    align-items: center;
+}
+
+.home-board-blocks, .targeting-board-blocks {
+    border: 1px solid gray;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 1px;
+}
+
+.board-block {
+    background-color: black;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board-block:hover {
+    background-color: rgba(75, 74, 74, 0.829);
+}
+
+.board-block:active {
+    background-color: rgba(75, 74, 74, 1);
+}
+
+.board-block > div {
+    width: 50%;
+    height: 50%;
+    background-color: white;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board-block > div > div{
+    width: 50%;
+    height: 50%;
+    background-color: black;
+    border-radius: 50px;
+}
+
+.game-panel-right {
+    width: clamp(550px, 55%, 800px);
+    height: 100%;
+}
+
+.targeting-board {
+    height: 65%;
+}
+
+.controls-display {
+    height: 25%;
+    margin-top: 15px;
+    color: var(--race-orange);
+}
+
+.controls-display > div {
+    height: 85%;
+    border: 1px solid var(--race-orange);
+    padding: 8px;
+    font-size: 1.5rem;
 }

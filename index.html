@@ -8,7 +8,7 @@
     <title>Celestial Battleship</title>
 </head>
 <body>
-    <div class="initial-background">
+    <!--<div class="initial-background">
         <button class="start-btn">START</button>
         <p class="game-mode-display">Game Mode: <span class="game-mode">Gunner</span></p>
         <div class="opponent-gallery">
@@ -16,6 +16,344 @@
                 <img src="./img/white-g.png" alt="">
                 <p>Gunner</p>
                 <p>(Easy)</p>
+            </div>
+        </div>
+    </div>-->
+    <div class="game-panel">
+        <div class="game-panel-left">
+            <div>
+                <p>YOUR FLEET</p>
+                <div class="player-fleet-display">
+                    <div>
+                        <div class="player-carrier-1 ship-hull-block"></div>
+                        <div class="player-carrier-2 ship-hull-block"></div>
+                        <div class="player-carrier-3 ship-hull-block"></div>
+                        <div class="player-carrier-4 ship-hull-block"></div>
+                        <div class="player-carrier-5 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="player-battleship-1 ship-hull-block"></div>
+                        <div class="player-battleship-2 ship-hull-block"></div>
+                        <div class="player-battleship-3 ship-hull-block"></div>
+                        <div class="player-battleship-4 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="player-cruiser-1 ship-hull-block"></div>
+                        <div class="player-cruiser-2 ship-hull-block"></div>
+                        <div class="player-cruiser-3 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="player-submarine-1 ship-hull-block"></div>
+                        <div class="player-submarine-2 ship-hull-block"></div>
+                        <div class="player-submarine-3 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="player-destroyer-1 ship-hull-block"></div>
+                        <div class="player-destroyer-2 ship-hull-block"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>ENEMY FLEET</p>
+                <div class="enemy-fleet-display">
+                    <div>
+                        <div class="enemy-carrier-1 ship-hull-block"></div>
+                        <div class="enemy-carrier-2 ship-hull-block"></div>
+                        <div class="enemy-carrier-3 ship-hull-block"></div>
+                        <div class="enemy-carrier-4 ship-hull-block"></div>
+                        <div class="enemy-carrier-5 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="enemy-battleship-1 ship-hull-block"></div>
+                        <div class="enemy-battleship-2 ship-hull-block"></div>
+                        <div class="enemy-battleship-3 ship-hull-block"></div>
+                        <div class="enemy-battleship-4 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="enemy-cruiser-1 ship-hull-block"></div>
+                        <div class="enemy-cruiser-2 ship-hull-block"></div>
+                        <div class="enemy-cruiser-3 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="enemy-submarine-1 ship-hull-block"></div>
+                        <div class="enemy-submarine-2 ship-hull-block"></div>
+                        <div class="enemy-submarine-3 ship-hull-block"></div>
+                    </div>
+                    <div>
+                        <div class="enemy-destroyer-1 ship-hull-block"></div>
+                        <div class="enemy-destroyer-2 ship-hull-block"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>HOME BOARD</p>
+                <div class="home-board">
+                    <div></div>
+                    <div class="home-board-number-coordinates">
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                    </div>
+                    <div class="home-board-letter-coordinates">
+                        <div>A</div>
+                        <div>B</div>
+                        <div>C</div>
+                        <div>D</div>
+                        <div>E</div>
+                        <div>F</div>
+                        <div>G</div>
+                        <div>H</div>
+                        <div>I</div>
+                        <div>J</div>
+                    </div>
+                    <div class="home-board-blocks">
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                        <div class="board-block"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game-panel-right">
+            <p>TARGETING BOARD</p>
+            <div class="targeting-board">
+                <div></div>
+                <div class="targeting-board-number-coordinates">
+                    <div>1</div>
+                    <div>2</div>
+                    <div>3</div>
+                    <div>4</div>
+                    <div>5</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                </div>
+                <div class="targeting-board-letter-coordinates">
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+                    <div>D</div>
+                    <div>E</div>
+                    <div>F</div>
+                    <div>G</div>
+                    <div>H</div>
+                    <div>I</div>
+                    <div>J</div>
+                </div>
+                <div class="targeting-board-blocks">
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                    <div class="board-block"></div>
+                </div>
+            </div>
+            <div class="controls-display">
+                <p>CONTROLS</p>
+                <div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel asperiores minima ad modi aliquid sapiente. Magnam repellat ad placeat? Quo exercitationem assumenda aliquid non nostrum magnam praesentium minus, est error.</p>
+                </div>
             </div>
         </div>
     </div>
