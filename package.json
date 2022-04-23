@@ -1,10 +1,32 @@
 {
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch *.js"
+    "watch": "jest --watch *.js",
+    "build": "webpack"
   },
+  "jest": {
+    "modulePaths": ["/shared/vendor/modules"],
+    "moduleFileExtensions": ["js", "jsx"],
+    "moduleDirectories": ["node_modules", "bower_components", "shared"],
+    "moduleNameMapper": {
+      "\\.(png)$": "<rootDir>/_mocks_/fileMock.js",
+      "\\.(css)$": "<rootDir>/_mocks_/styleMock.js"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
-    "jest": "^27.5.1"
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^27.5.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
   }
 }
