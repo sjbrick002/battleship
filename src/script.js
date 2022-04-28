@@ -4,6 +4,12 @@
 
 const body = document.body;
 
+function clearElement(element = body) {
+    while (element.firstChild) {
+        element.removeChild(body.firstChild);
+    };
+};
+
 function renderStartingPage() {
     const initialBackground = document.createElement("div");
     initialBackground.className = "initial-background";
@@ -11,6 +17,10 @@ function renderStartingPage() {
     const startBtn = document.createElement("button");
     startBtn.className = "start-btn";
     startBtn.textContent = "START";
+    startBtn.addEventListener("click", () => {
+        clearElement();
+        renderGamePanel();
+    });
     initialBackground.appendChild(startBtn);
 
     const gameModeDisplay = document.createElement("p");
@@ -147,4 +157,4 @@ function renderGamePanel() {
     body.appendChild(gamePanel);
 };
 
-renderGamePanel();
+renderStartingPage();
