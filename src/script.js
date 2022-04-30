@@ -1,6 +1,7 @@
 //import { Ship, Board, Player } from "./factory.js";
 //import { checkWinner } from "./gamePlay.js";
-//import "./style.css";
+import "./style.css";
+import whiteG from "./img/white-g.png";
 
 const body = document.body;
 
@@ -34,11 +35,11 @@ function renderStartingPage() {
     opponentGallery.className = "opponent-gallery";
     const gunnerCard = document.createElement("div");
     gunnerCard.className = "opponent-card";
-    gunnerImg = document.createElement("img");
-    gunnerImg.src = "./img/white-g.png";
-    gunnerName = document.createElement("p");
+    const gunnerImg = document.createElement("img");
+    gunnerImg.src = whiteG;
+    const gunnerName = document.createElement("p");
     gunnerName.textContent = "Gunner";
-    gunnerDifficulty = document.createElement("p");
+    const gunnerDifficulty = document.createElement("p");
     gunnerDifficulty.textContent = "(Easy)";
     gunnerCard.appendChild(gunnerImg);
     gunnerCard.appendChild(gunnerName);

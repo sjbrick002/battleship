@@ -7,16 +7,14 @@ module.exports = {
         "script": "./src/script.js",
     },
     devtool: "inline-source-map",
+    devServer: {
+        static: "./dist",
+    },
     plugins: [
         new HtmlWebpackPlugin({
             title: "Celestial Battleship",
         }),
     ],
-    output: {
-        filename: "[name].bundle.js",
-        path: path.resolve(__dirname, "dist"),
-        clean: true
-    },
     module: {
         rules: [
             {
@@ -24,9 +22,17 @@ module.exports = {
                 use: ["style-loader", "css-loader"],
             },
             {
-                test: /\.(png|svg|jpg|jpeg|git)/i,
-                use: "asset/resource",
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: "asset/resource",
             },
         ],
+    },
+    output: {
+        filename: "[name].bundle.js",
+        path: path.resolve(__dirname, "dist"),
+        clean: true
+    },
+    optimization: {
+        runtimeChunk: "single",
     },
 };
