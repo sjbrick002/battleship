@@ -2,6 +2,149 @@
 //import { checkWinner } from "./gamePlay.js";
 import "./style.css";
 import whiteG from "./img/white-g.png";
+//import spaceMusic from "./sounds/391840__vabsounds__space.wav";
+
+
+
+
+
+
+
+//const gameMusic = document.createElement("audio");
+//gameMusic.src = spaceMusic;
+//gameMusic.setAttribute("type", "audio/wav");
+
+//function playSound(sound, needsLoop = false) {
+//    if (sound.hasAttribute("muted")) {sound.removeAttribute("muted")};
+//    sound.setAttribute("autoplay", "");
+//    if (needsLoop) {sound.setAttribute("loop", "")};
+//};
+
+//function stopSound(sound) {
+//    if (sound.hasAttribute("autoplay")) {sound.removeAttribute("autoplay")};
+//    sound.setAttribute("muted", "");
+//}
+
+
+
+
+
+
+
+let gameStarted = false;
+
+let isPlacingShip = false;
+let homeBlockRefNumber = 0;
+let placedShipCount = 0;
+let isShipVertical = false;
+const shipSizeArray = [5,4,3,3,2];
+
+function moveShipModel(e) {
+    if (e.key === "Enter") {
+        const homeBlockList = document.querySelectorAll(".home-board-block");
+        //WIP
+        function checkFreeSpace() {
+        };
+        //
+        if (!isShipVertical) {
+            for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
+                homeBlockList[homeBlockRefNumber + i].classList.add("undamaged-hull")
+            };
+        };
+        if (isShipVertical) {
+            for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
+                homeBlockList[homeBlockRefNumber + i * 10].classList.add("undamaged-hull")
+            };
+        };
+        removeShipModel();
+        placedShipCount++;
+        homeBlockRefNumber = 0;
+        isShipVertical = false;
+        revealShipModel(isShipVertical);
+        
+    };
+    if (e.key === "q") {
+        if (!isShipVertical && homeBlockRefNumber + shipSizeArray[placedShipCount] * 10 -10 <= 99 || isShipVertical && (homeBlockRefNumber) % 10 <= 10- shipSizeArray[placedShipCount]) {
+            isShipVertical = !isShipVertical;
+            removeShipModel();
+            revealShipModel(isShipVertical);
+        };
+    };
+    if (!isShipVertical) {
+        if ((e.key === "a" || e.key === "ArrowLeft") && homeBlockRefNumber % 10 !== 0) {
+            removeShipModel();
+            homeBlockRefNumber--;
+            revealShipModel(isShipVertical);
+        };
+        if ((e.key === "w" || e.key === "ArrowUp") && homeBlockRefNumber - 10 >= 0) {
+            removeShipModel();
+            homeBlockRefNumber = homeBlockRefNumber - 10;
+            revealShipModel(isShipVertical);
+        };
+        if ((e.key === "s" || e.key === "ArrowDown") && homeBlockRefNumber + 10 <= 99) {
+            removeShipModel();
+            homeBlockRefNumber = homeBlockRefNumber + 10;
+            revealShipModel(isShipVertical);
+        };
+        if ((e.key === "d" || e.key === "ArrowRight") && (homeBlockRefNumber + shipSizeArray[placedShipCount]) % 10 !== 0) {
+            removeShipModel();
+            homeBlockRefNumber++;
+            revealShipModel(isShipVertical);
+        };
+    };
+    if (isShipVertical) {
+        if ((e.key === "a" || e.key === "ArrowLeft") && homeBlockRefNumber % 10 !== 0) {
+            removeShipModel();
+            homeBlockRefNumber--;
+            revealShipModel(isShipVertical);
+        };
+        if ((e.key === "w" || e.key === "ArrowUp") && homeBlockRefNumber - 10 >= 0) {
+            removeShipModel();
+            homeBlockRefNumber = homeBlockRefNumber - 10;
+            revealShipModel(isShipVertical);
+        };
+        if ((e.key === "s" || e.key === "ArrowDown") && homeBlockRefNumber + shipSizeArray[placedShipCount] * 10 <= 99) {
+            removeShipModel();
+            homeBlockRefNumber = homeBlockRefNumber + 10;
+            revealShipModel(isShipVertical);
+        };
+        if ((e.key === "d" || e.key === "ArrowRight") && (homeBlockRefNumber + 1) % 10 !== 0) {
+            removeShipModel();
+            homeBlockRefNumber++;
+            revealShipModel(isShipVertical);
+        };
+    };
+};
+
+function revealShipModel(isShipVertical) {
+    const homeBlockList = document.querySelectorAll(".home-board-block");
+    for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
+        if (isShipVertical) {homeBlockList[homeBlockRefNumber + i * 10].classList.add("flashing-background")}
+        if (!isShipVertical) {homeBlockList[homeBlockRefNumber + i].classList.add("flashing-background")};
+    };
+    window.addEventListener("keydown", moveShipModel);
+};
+
+function removeShipModel() {
+    window.removeEventListener("keydown", moveShipModel);
+    const flashingHomeBlockList = document.querySelectorAll(".flashing-background");
+    if (flashingHomeBlockList.length) {
+        flashingHomeBlockList.forEach(block => block.classList.remove("flashing-background"));
+    };
+};
+
+window.addEventListener("keydown", function(e){
+    if (gameStarted) {
+        if (e.key === " ") {
+            isPlacingShip = !isPlacingShip;
+            if (isPlacingShip) {
+                revealShipModel();
+            } else {
+                removeShipModel();
+            };
+        };
+    };
+});
 
 const body = document.body;
 
@@ -21,6 +164,7 @@ function renderStartingPage() {
     startBtn.addEventListener("click", () => {
         clearElement();
         renderGamePanel();
+        gameStarted = true;
     });
     initialBackground.appendChild(startBtn);
 
@@ -48,6 +192,12 @@ function renderStartingPage() {
     initialBackground.appendChild(opponentGallery);
 
     body.appendChild(initialBackground);
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////playSound(gameMusic, true);
 };
 
 function renderFleetDisplay(fleetOwnerString, commanderString) {
@@ -94,26 +244,26 @@ function renderBoard(boardTypeString) {
             };
         };
         function createBoardBlocks(classString) {
-            for (let j = 0; j < 100; j++) {
+            for (let j = 0; j < 10; j++) {
                 const boardBlock = document.createElement("div");
-                boardBlock.className = `${classString}`;
+                boardBlock.className = `${boardTypeString}-${classString}`;
                 div.appendChild(boardBlock);
             };
         };
         if (i > 0) {
-            console.log("greater than 0");
             div.className = `${boardTypeString}-board-${classesArray[i]}`;
             if (i === 1) {
-                console.log("i equals 1");
                 createCoordinateDisplay("numbers");
             };
             if (i === 2) {
-                console.log("i equals 2");
                 createCoordinateDisplay("letters");
             };
             if (i === 3) {
-                console.log("i equals 3");
-                createBoardBlocks(boardItems.class);
+                let x = 0;
+                while (x < 10) {
+                    createBoardBlocks(boardItems.class);
+                    x++;
+                };
             };
         };
         board.appendChild(div);

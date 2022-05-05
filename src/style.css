@@ -160,7 +160,7 @@ img {
     gap: 1px;
 }
 
-.board-block {
+.home-board-block, .targeting-board-block {
     background-color: black;
     border-radius: 4px;
     display: flex;
@@ -168,14 +168,31 @@ img {
     align-items: center;
 }
 
-.board-block:hover {
+.targeting-board-block:hover {
     background-color: rgba(75, 74, 74, 0.829);
 }
 
-.board-block:active {
+.targeting-board-block:active {
     background-color: rgba(75, 74, 74, 1);
 }
 
+.flashing-background {
+    animation: flash 1.3s infinite;
+}
+
+@keyframes flash {
+    0% {
+        background-color: rgb(75, 74, 74);
+    }
+    50% {
+        background-color: var(--spaceship-white);
+    }
+    100% {
+        background-color: rgb(75, 74, 74);
+    }
+}
+
+/*
 .board-block > div {
     width: 50%;
     height: 50%;
@@ -191,6 +208,11 @@ img {
     height: 50%;
     background-color: black;
     border-radius: 50px;
+}
+*/
+
+.undamaged-hull {
+    background-color: var(--spaceship-white);
 }
 
 .game-panel-right {
