@@ -29,10 +29,47 @@ import whiteG from "./img/white-g.png";
 
 
 
+let targetingBlockRefNumber = 0;
+
+function moveTargetingMarker(e) {
+    const targetingBlockList = document.querySelectorAll(".targeting-board-block");
+    const currentTargetBlock = document.querySelector(".target-grid-block");
+    function updateTargetMarker() {
+        currentTargetBlock.classList.remove("target-grid-block");
+        targetingBlockList[targetingBlockRefNumber].classList.add("target-grid-block");
+    };
+    if ((e.key === "a" || e.key === "ArrowLeft") && targetingBlockRefNumber > 0) {
+        targetingBlockRefNumber--;
+        updateTargetMarker();
+    };
+    if ((e.key === "s" || e.key === "ArrowDown") && targetingBlockRefNumber < 90) {
+        targetingBlockRefNumber += 10;
+        updateTargetMarker();
+    };
+    if ((e.key === "w" || e.key === "ArrowUp") && targetingBlockRefNumber > 9) {
+        targetingBlockRefNumber -= 10;
+        updateTargetMarker();
+    };
+    if ((e.key === "d" || e.key === "ArrowRight") && targetingBlockRefNumber < 99) {
+        targetingBlockRefNumber++;
+        updateTargetMarker();
+    };
+    if (e.key === "f") {
+        currentTargetBlock.classList.add("firing");
+    };
+};
+
+
+function initializeFiringStage() {
+    const targetingBlockList = document.querySelectorAll(".targeting-board-block");
+    targetingBlockList[0].classList.add("target-grid-block");
+    window.addEventListener("keydown", moveTargetingMarker);
+}
+
+
 
 
 let gameStarted = false;
-let isBattleReady = false;
 
 let isPlacingShip = false;
 let homeBlockRefNumber = 0;
@@ -65,7 +102,7 @@ function moveShipModel(e) {
             homeBlockRefNumber = 0;
             isShipVertical = false;
             if (placedShipCount < 5) {revealShipModel(isShipVertical)}
-            else {isBattleReady = true};
+            else {initializeFiringStage()};
         };        
     };
     if (e.key === "q") {

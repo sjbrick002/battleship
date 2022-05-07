@@ -167,12 +167,8 @@ img {
     align-items: center;
 }
 
-.targeting-board-block:hover {
-    background-color: rgba(75, 74, 74, 0.829);
-}
-
-.targeting-board-block:active {
-    background-color: rgba(75, 74, 74, 1);
+.target-grid-block {
+    border: solid 1px var(--race-orange);
 }
 
 .flashing-background {
@@ -188,6 +184,20 @@ img {
     }
     100% {
         background-color: rgb(75, 74, 74);
+    }
+}
+
+.firing {
+    animation: firing 0.3s;
+}
+
+@keyframes firing {
+    0% {
+        width: 0px;
+        background-color: var(--race-orange);
+    }
+    100% {
+        background-color: var(--race-orange);
     }
 }
 
