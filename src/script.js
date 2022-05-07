@@ -32,6 +32,7 @@ import whiteG from "./img/white-g.png";
 
 
 let gameStarted = false;
+let isBattleReady = false;
 
 let isPlacingShip = false;
 let homeBlockRefNumber = 0;
@@ -42,26 +43,30 @@ const shipSizeArray = [5,4,3,3,2];
 function moveShipModel(e) {
     if (e.key === "Enter") {
         const homeBlockList = document.querySelectorAll(".home-board-block");
-        //WIP
         function checkFreeSpace() {
-        };
-        //
-        if (!isShipVertical) {
-            for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
-                homeBlockList[homeBlockRefNumber + i].classList.add("undamaged-hull")
+            for (let i = 0; i < homeBlockList.length; i++) {
+                if (homeBlockList[i].classList.contains("undamaged-hull") && homeBlockList[i].classList.contains("flashing-background")) {return true};
             };
         };
-        if (isShipVertical) {
-            for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
-                homeBlockList[homeBlockRefNumber + i * 10].classList.add("undamaged-hull")
+        let isSpaceTaken = checkFreeSpace();
+        if (!isSpaceTaken) {
+            if (!isShipVertical) {
+                for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
+                    homeBlockList[homeBlockRefNumber + i].classList.add("undamaged-hull")
+                };
             };
-        };
-        removeShipModel();
-        placedShipCount++;
-        homeBlockRefNumber = 0;
-        isShipVertical = false;
-        revealShipModel(isShipVertical);
-        
+            if (isShipVertical) {
+                for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
+                    homeBlockList[homeBlockRefNumber + i * 10].classList.add("undamaged-hull")
+                };
+            };
+            removeShipModel();
+            placedShipCount++;
+            homeBlockRefNumber = 0;
+            isShipVertical = false;
+            if (placedShipCount < 5) {revealShipModel(isShipVertical)}
+            else {isBattleReady = true};
+        };        
     };
     if (e.key === "q") {
         if (!isShipVertical && homeBlockRefNumber + shipSizeArray[placedShipCount] * 10 -10 <= 99 || isShipVertical && (homeBlockRefNumber) % 10 <= 10- shipSizeArray[placedShipCount]) {
@@ -119,7 +124,7 @@ function moveShipModel(e) {
 function revealShipModel(isShipVertical) {
     const homeBlockList = document.querySelectorAll(".home-board-block");
     for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
-        if (isShipVertical) {homeBlockList[homeBlockRefNumber + i * 10].classList.add("flashing-background")}
+        if (isShipVertical) {homeBlockList[homeBlockRefNumber + i * 10].classList.add("flashing-background")};
         if (!isShipVertical) {homeBlockList[homeBlockRefNumber + i].classList.add("flashing-background")};
     };
     window.addEventListener("keydown", moveShipModel);
@@ -136,11 +141,9 @@ function removeShipModel() {
 window.addEventListener("keydown", function(e){
     if (gameStarted) {
         if (e.key === " ") {
-            isPlacingShip = !isPlacingShip;
+            isPlacingShip = true;
             if (isPlacingShip) {
                 revealShipModel();
-            } else {
-                removeShipModel();
             };
         };
     };
