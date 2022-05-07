@@ -88,7 +88,6 @@ img {
     background-color: rgba(75, 74, 74, 1);
 }
 
-
 .game-panel {
     width: clamp(860px, 80%, 1600px);
     height: inherit;
@@ -192,27 +191,12 @@ img {
     }
 }
 
-/*
-.board-block > div {
-    width: 50%;
-    height: 50%;
-    background-color: white;
-    border-radius: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.board-block > div > div{
-    width: 50%;
-    height: 50%;
-    background-color: black;
-    border-radius: 50px;
-}
-*/
-
 .undamaged-hull {
     background-color: var(--spaceship-white);
+}
+
+.damaged-hull {
+    background-color: var(--race-orange);
 }
 
 .game-panel-right {

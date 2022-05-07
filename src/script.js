@@ -69,7 +69,7 @@ function moveShipModel(e) {
         };        
     };
     if (e.key === "q") {
-        if (!isShipVertical && homeBlockRefNumber + shipSizeArray[placedShipCount] * 10 -10 <= 99 || isShipVertical && (homeBlockRefNumber) % 10 <= 10- shipSizeArray[placedShipCount]) {
+        if (!isShipVertical && homeBlockRefNumber + shipSizeArray[placedShipCount] * 10 -10 <= 99 || isShipVertical && (homeBlockRefNumber) % 10 <= 10 - shipSizeArray[placedShipCount]) {
             isShipVertical = !isShipVertical;
             removeShipModel();
             revealShipModel(isShipVertical);
