@@ -1,11 +1,10 @@
-//import { Ship, Board, Player } from "./factory.js";
-//import { checkWinner } from "./gamePlay.js";
+import { checkWinner, newCompetitors, getRandomCoordinate, getRandomOrientation } from "./gamePlay.js";
 import "./style.css";
 import whiteG from "./img/white-g.png";
 //import spaceMusic from "./sounds/391840__vabsounds__space.wav";
 
 
-
+let competitors = [];
 
 
 
@@ -30,13 +29,17 @@ import whiteG from "./img/white-g.png";
 
 
 let targetingBlockRefNumber = 0;
+let previousOpponentTargetCoordinates = [];
 
 function moveTargetingMarker(e) {
+    const homeBlockList = document.querySelectorAll(".home-board-block");
     const targetingBlockList = document.querySelectorAll(".targeting-board-block");
     const currentTargetBlock = document.querySelector(".target-grid-block");
     function updateTargetMarker() {
         currentTargetBlock.classList.remove("target-grid-block");
+        currentTargetBlock.textContent = "";
         targetingBlockList[targetingBlockRefNumber].classList.add("target-grid-block");
+        targetingBlockList[targetingBlockRefNumber].textContent = "+";
     };
     if ((e.key === "a" || e.key === "ArrowLeft") && targetingBlockRefNumber > 0) {
         targetingBlockRefNumber--;
@@ -54,15 +57,55 @@ function moveTargetingMarker(e) {
         targetingBlockRefNumber++;
         updateTargetMarker();
     };
-    if (e.key === "f") {
+    if (e.key === "f" && !currentTargetBlock.classList.contains("firing")) {
         currentTargetBlock.classList.add("firing");
+        const playerAttackResult = competitors[0].attack(targetingBlockRefNumber, competitors[1]);
+        let currentOpponentTargetCoordinate = getRandomCoordinate();
+        while (previousOpponentTargetCoordinates.includes(currentOpponentTargetCoordinate)) {
+            currentOpponentTargetCoordinate = getRandomCoordinate();
+        };
+        previousOpponentTargetCoordinates.push(currentOpponentTargetCoordinate);
+        const opponentAttackResult = competitors[1].attack(currentOpponentTargetCoordinate, competitors[0]);
+        if (playerAttackResult[1] === "miss") {currentTargetBlock.classList.add("empty-grid-block")
+        };
+        if (playerAttackResult[1] === "hit") {currentTargetBlock.classList.add("damaged-hull")};
+        if (playerAttackResult[1] === "sunk") {
+            currentTargetBlock.classList.add("damaged-hull");
+            const sunkFleetShip = document.querySelectorAll(`.enemy-${playerAttackResult[0]}`);
+            sunkFleetShip.forEach(block => block.classList.add("damaged-hull"));
+        };
+        if (opponentAttackResult[1] === "miss") {homeBlockList[currentOpponentTargetCoordinate].classList.add("empty-grid-block")};
+        if (opponentAttackResult[1] === "hit") {homeBlockList[currentOpponentTargetCoordinate].classList.add("damaged-hull")};
+        if (opponentAttackResult[1] === "sunk") {
+            homeBlockList[currentOpponentTargetCoordinate].classList.add("damaged-hull");
+            const sunkFleetShip = document.querySelectorAll(`.player-${opponentAttackResult[0]}`);
+            sunkFleetShip.forEach(block => block.classList.add("damaged-hull"));
+        };
+        if (checkWinner(competitors)) {
+            alert(checkWinner(competitors));
+            endCombat();
+            targetingBlockRefNumber = 0;
+            previousOpponentTargetCoordinates = [];
+            gameStarted = false;
+            homeBlockRefNumber = 0;
+            placedShipCount = 0;
+            isShipVertical = false;
+            clearElement(body);
+            renderStartingPage();
+
+        }
     };
+};
+
+function endCombat() {
+    window.removeEventListener("keydown", moveTargetingMarker);
 };
 
 
 function initializeFiringStage() {
     const targetingBlockList = document.querySelectorAll(".targeting-board-block");
     targetingBlockList[0].classList.add("target-grid-block");
+    targetingBlockList[0].textContent = "+";
     window.addEventListener("keydown", moveTargetingMarker);
 }
 
@@ -71,7 +114,6 @@ function initializeFiringStage() {
 
 let gameStarted = false;
 
-let isPlacingShip = false;
 let homeBlockRefNumber = 0;
 let placedShipCount = 0;
 let isShipVertical = false;
@@ -87,6 +129,11 @@ function moveShipModel(e) {
         };
         let isSpaceTaken = checkFreeSpace();
         if (!isSpaceTaken) {
+            competitors[0].setShip(homeBlockRefNumber, isShipVertical);
+            let computerSetShipResult = "";
+            while (computerSetShipResult !== "success" ) {
+                computerSetShipResult = competitors[1].setShip(getRandomCoordinate(), getRandomOrientation());
+            };
             if (!isShipVertical) {
                 for (let i = 0; i < shipSizeArray[placedShipCount]; i++) {
                     homeBlockList[homeBlockRefNumber + i].classList.add("undamaged-hull")
@@ -178,10 +225,7 @@ function removeShipModel() {
 window.addEventListener("keydown", function(e){
     if (gameStarted) {
         if (e.key === " ") {
-            isPlacingShip = true;
-            if (isPlacingShip) {
-                revealShipModel();
-            };
+            revealShipModel();
         };
     };
 });
@@ -205,6 +249,7 @@ function renderStartingPage() {
         clearElement();
         renderGamePanel();
         gameStarted = true;
+        competitors = newCompetitors();
     });
     initialBackground.appendChild(startBtn);
 
@@ -247,12 +292,12 @@ function renderFleetDisplay(fleetOwnerString, commanderString) {
     const fleetDisplay = document.createElement("div");
     fleetDisplay.className = `${commanderString}-fleet-display`;
     for (let i = 0; i < 5; i++) {
-        const shipNameArray = ["carrirer", "battleship", "cruiser", "submarine", "destroyer"];
+        const shipNameArray = ["carrier", "battleship", "cruiser", "submarine", "destroyer"];
         const shipHullCount = [5,4,3,3,2];
         const shipDiv = document.createElement("div");
         for (let j = 0; j < shipHullCount[i]; j++) {
             const shipBlock = document.createElement("div");
-            shipBlock.className = `${commanderString}-${shipNameArray[i]}-${j + 1} ship-hull-block`;
+            shipBlock.className = `${commanderString}-${shipNameArray[i]} ship-hull-block`;
             shipDiv.appendChild(shipBlock);
         };
         fleetDisplay.appendChild(shipDiv);

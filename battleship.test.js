@@ -3,26 +3,26 @@ import { checkWinner } from "./src/gamePlay.js"
 
 describe("Ship factory function tests", () => {
     test("Ship object returns an array with a length based off ship hitpoints", () => {
-        expect(Ship(0)["hull"]).toEqual([]);
-        expect(Ship(2)["hull"]).toEqual([0,0]);
-        expect(Ship(3)["hull"]).toEqual([0,0,0]);
-        expect(Ship(4)["hull"]).toEqual([0,0,0,0]);
-        expect(Ship(5)["hull"]).toEqual([0,0,0,0,0]);
+        expect(Ship("ship",0)["hull"]).toEqual([]);
+        expect(Ship("ship",2)["hull"]).toEqual([0,0]);
+        expect(Ship("ship",3)["hull"]).toEqual([0,0,0]);
+        expect(Ship("ship",4)["hull"]).toEqual([0,0,0,0]);
+        expect(Ship("ship",5)["hull"]).toEqual([0,0,0,0,0]);
     });
     
     test("Ship(x).hit() function changes given array item value to 1", () => {
-        const ship = Ship(5);
+        const ship = Ship("ship",5);
         ship.hit(3);
         expect(ship["hull"][3]).toEqual(1);
     });
     
     test("Ship(x).isSunk() returns false if ship's hull array items are not all 1", () => {
-        const ship = Ship(2);
+        const ship = Ship("ship",2);
         expect(ship.isSunk()).toBeFalsy();
     });
 
     test("Ship(x).isSunk() returns true if ship's hull array items are all 1", () => {
-        const ship = Ship(2);
+        const ship = Ship("ship",2);
         ship.hit(0);
         ship.hit(1);
         expect(ship.isSunk()).toBeTruthy();
@@ -37,13 +37,13 @@ describe("Board factory function tests", () => {
 
     test("Board().reportCoordinateAsset() will return an array of a ship object and its hull section index number if a ship has been placed at coordinates", () => {
         const board = Board();
-        const destroyer = Ship(2);
+        const destroyer = Ship("destroyer",2);
         board.placeBoat(0, destroyer, true);
         expect(board.reportCoordinateAsset(0)).toEqual([destroyer, 0]);
     });
     
     test("Board().placeBoat() can change values of the board's target coordinate key in the horizontal direction", () => {
-        let boat = Ship(4);
+        let boat = Ship("boat",4);
         let board = Board();
         board.placeBoat(0, boat, false);
         expect(board.reportCoordinateAsset(0)).toEqual([boat, 0]);
@@ -53,7 +53,7 @@ describe("Board factory function tests", () => {
     });
     
     test("Board().placeBoat() can change values of the board's target coordinate key in the vertical direction", () => {
-        let boat = Ship(4);
+        let boat = Ship("boat",4);
         let board = Board();
         board.placeBoat(0, boat, true);
         expect(board.reportCoordinateAsset(0)).toEqual([boat, 0]);
@@ -63,32 +63,32 @@ describe("Board factory function tests", () => {
     });
     
     test("Board().placeBoat() will check if a boat will fit in specified coordinates before changing board values", () => {
-        let boat = Ship(5);
+        let boat = Ship("boat",5);
         let board = Board();
         expect(board.placeBoat(6, boat, false)).toEqual("Insufficient space");
         expect(board.placeBoat(60, boat, true)).toEqual("Insufficient space");
     });
     
     test("Board().placeBoat() will check if boat assets already exist at coordinates before a new boat is placed", () => {
-        let battleship = Ship(4);
+        let battleship = Ship("battleship",4);
         let board = Board();
         board.placeBoat(0, battleship, true);
-        expect(board.placeBoat(30, Ship(5), true)).toEqual("There is already a ship there!");
+        expect(board.placeBoat(30, Ship("ship",5), true)).toEqual("There is already a ship there!");
     });
 
     test("Board().targetCoordinate() will record when a coordinate is attacked and not run if the coordinate has been attacked before", () => {
         let board = Board();
-        expect(board.targetCoordinate(0, 0)).toEqual(null);
-        expect(board.targetCoordinate(0, 0)).toEqual(undefined);
+        expect(board.targetCoordinate(0)).toEqual(null);
+        expect(board.targetCoordinate(0)).toEqual(undefined);
     });
     
-    test("Board().targetCoordinate() upon a hit will call appropriate ship's Hit() function and check if the damaged ship is sunk returning true or false based on the ship's status", () => {
+    test("Board().targetCoordinate() upon a hit will call appropriate ship's Hit() function and check if the damaged ship is sunk returning an array of the ship hit and boolean value of true or false based on the ship's sunk status", () => {
         let board = Board();
-        let destroyer = Ship(2);
+        let destroyer = Ship("destroyer",2);
         board.placeBoat(21, destroyer, false);
-        expect(board.targetCoordinate(22)).toEqual(false);
+        expect(board.targetCoordinate(22)).toEqual(["destroyer",false]);
         expect(destroyer.hull[1]).toEqual(1);
-        expect(board.targetCoordinate(21)).toEqual(true);
+        expect(board.targetCoordinate(21)).toEqual(["destroyer",true]);
     });
 });
 
@@ -103,20 +103,20 @@ describe("Player factory function tests", () => {
         expect(player.receiveAttack(0)).toEqual(undefined);
     });
 
-    test("Player().receiveAttack() will return false when the attack hits a ship but does not sink it", () => {
+    test("Player().receiveAttack() will return [ship.name,false] when the attack hits a ship but does not sink it", () => {
         let player = Player();
         player.setShip(0, true);
-        expect(player.receiveAttack(20)).toEqual(false);
+        expect(player.receiveAttack(20)).toEqual(["carrier",false]);
     });
 
-    test("Player().receiveAttack() will return true when the attack hits a ship and sinks it", () => {
+    test("Player().receiveAttack() will return [ship.name,true] when the attack hits a ship and sinks it", () => {
         let player = Player();
         player.setShip(0,true);
         player.receiveAttack(0);
         player.receiveAttack(10);
         player.receiveAttack(20);
         player.receiveAttack(30);
-        expect(player.receiveAttack(40)).toEqual(true);
+        expect(player.receiveAttack(40)).toEqual(["carrier",true]);
     });
 
     test("Player().setShip() will return 'success' when a ship is successfully placed on the board", () => {
@@ -171,18 +171,18 @@ describe("Player factory function tests", () => {
 });
 
 describe("Player interaction tests", () => {
-    test("attack() returns 'miss' when given coordinates a ship does not exist in", () => {
+    test("attack() returns an array of [null,'miss'] when given coordinates a ship does not exist in", () => {
         const player = Player();
-        expect(player.attack(0,player)).toEqual("miss");
+        expect(player.attack(0,player)).toEqual([null,"miss"]);
     });
 
     test("attack() returns 'hit' when given coordinates a ship exists in", () => {
         const player = Player();
         player.setShip(4,false);
-        expect(player.attack(4,player)).toEqual("hit");
+        expect(player.attack(4,player)).toEqual(["carrier","hit"]);
     });
 
-    test("attack() returns 'sunk' when given coordinates a ship exists in where isSunk() returns true", () => {
+    test("attack() returns [ship.name,'sunk'] when given coordinates a ship exists in where isSunk() returns true", () => {
         const computer = Player();
         const player = Player();
         //DUMMY CONTENT
@@ -199,13 +199,13 @@ describe("Player interaction tests", () => {
         //
         player.attack(76,computer);
         computer.attack(0,player);
-        expect(player.attack(86,computer)).toEqual("sunk");
+        expect(player.attack(86,computer)).toEqual(["destroyer","sunk"]);
     });
 
     test("checkWinner() will return 'Player wins!' if computer.isFleetDead() returns true but player.isFleetDead() returns false", () => {
         const computer = Player();
         const player = Player();
-        const players = [computer, player];
+        const players = [player,computer];
         //DUMMY CONTENT
         computer.setShip(4,false);
         computer.setShip(22,true);
@@ -257,7 +257,7 @@ describe("Player interaction tests", () => {
     test("checkWinner() will return 'computer wins!' if computer.isFleetDead() returns false but player.isFleetDead() returns true", () => {
         const computer = Player();
         const player = Player();
-        const players = [computer, player];
+        const players = [player,computer];
         //DUMMY CONTENT
         computer.setShip(4,false);
         computer.setShip(22,true);
@@ -304,6 +304,6 @@ describe("Player interaction tests", () => {
         computer.attack(76,player);
         player.attack(77,computer);
         computer.attack(86,player);
-        expect(checkWinner(players)).toEqual("Computer wins!");
+        expect(checkWinner(players)).toEqual("Opponent wins!");
     });
 });

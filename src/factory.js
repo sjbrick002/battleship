@@ -1,4 +1,4 @@
-const Ship = (hitpoints) => {
+const Ship = (name, hitpoints) => {
     let hull = [];
     for (let i = 0; i < hitpoints; i++) {
         hull.push(0);
@@ -11,7 +11,7 @@ const Ship = (hitpoints) => {
         if (hitpoints === damage) {return true};
         return false;
     };
-    return {hull, hit, isSunk};
+    return { name, hull, hit, isSunk};
 };
 
 const Board = () => {
@@ -56,7 +56,7 @@ const Board = () => {
             let asset = reportCoordinateAsset(gridCoordinate);
             if (asset) {
                 asset[0].hit(asset[1]);
-                return asset[0].isSunk();
+                return [asset[0].name, asset[0].isSunk()];
             };
             return asset;
         }; 
@@ -64,31 +64,16 @@ const Board = () => {
     return { reportCoordinateAsset, placeBoat, targetCoordinate };
 };
 
-const Player = (isComputer = false) => {
+const Player = () => {
     const board = Board();
-    const carrier = Ship(5);
-    const battleship = Ship(4);
-    const cruiser = Ship(3);
-    const submarine = Ship(3);
-    const destroyer = Ship(2);
+    const carrier = Ship("carrier",5);
+    const battleship = Ship("battleship",4);
+    const cruiser = Ship("cruiser",3);
+    const submarine = Ship("submarine",3);
+    const destroyer = Ship("destroyer",2);
     const fleet = [carrier, battleship, cruiser, submarine, destroyer];
     let placedShipCount = 0;
-    function getRandomCoordinate() {
-        return Math.floor(Math.random() * 100);
-    };
-    function getRandomOrientation() {
-        const number = Math.floor(Math.random() * 2);
-        if (number === 1) {return true};
-        return false;
-    };
     function setShip(gridCoordinate, isVertical = false) {
-        if (isComputer) {
-            if (placedShipCount < fleet.length) {
-                let result = board.placeBoat(getRandomCoordinate(), fleet[placedShipCount], getRandomOrientation());
-                if (result === "success") {placedShipCount++};
-                return result;
-            };
-        };
         if (placedShipCount < fleet.length) {
             let result = board.placeBoat(gridCoordinate, fleet[placedShipCount], isVertical);
             if (result === "success") {placedShipCount++};
@@ -96,35 +81,21 @@ const Player = (isComputer = false) => {
         };
     };
     function receiveAttack(gridCoordinate) {
-        const attackResult = board.targetCoordinate(gridCoordinate);
-        return attackResult;
+        const targetAsset = board.targetCoordinate(gridCoordinate);
+        return targetAsset;
     };
     function attack(gridCoordinate, target) {
-        if (isComputer) {
-            let attackResult;
-            while (attackResult === undefined) {
-                attackResult = target.receiveAttack(getRandomCoordinate());
-            };
-            if (attackResult === null) {
-                return "miss";
-            };
-            if (attackResult === false) {
-                return "hit";
-            };
-            if (attackResult === true) {
-                return "sunk";
-            };
-        };
         const attackResult = target.receiveAttack(gridCoordinate);
         if (attackResult === null) {
-            return "miss";
+            return [null,"miss"];
         };
-        if (attackResult === false) {
-            return "hit";
+        if (attackResult[1] === false) {
+            return [attackResult[0],"hit"];
         };
-        if (attackResult === true) {
-            return "sunk";
+        if (attackResult[1] === true) {
+            return [attackResult[0],"sunk"];
         };
+        return attackResult;
     };
     function isFleetDead() {
         let fleetGraveyard = fleet.filter(ship => ship.isSunk());

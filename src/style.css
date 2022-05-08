@@ -169,6 +169,7 @@ img {
 
 .target-grid-block {
     border: solid 1px var(--race-orange);
+    color: var(--spaceship-white);
 }
 
 .flashing-background {
@@ -207,6 +208,10 @@ img {
 
 .damaged-hull {
     background-color: var(--race-orange);
+}
+
+.empty-grid-block {
+    border: solid 1px var(--tech-blue);
 }
 
 .game-panel-right {

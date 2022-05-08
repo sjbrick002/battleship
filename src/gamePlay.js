@@ -1,8 +1,29 @@
+import {Player} from "./factory";
+
 function checkWinner(playersArray) {
-    const computerLost = playersArray[0].isFleetDead();
-    const playerLost = playersArray[1].isFleetDead();
-    if (computerLost) {return "Player wins!"};
-    if (playerLost) {return "Computer wins!"};
+    const playerLost = playersArray[0].isFleetDead();
+    const opponentLost = playersArray[1].isFleetDead();
+    if (playerLost) {return "Opponent wins!"};
+    if (opponentLost) {return "Player wins!"};
+    if (playerLost && opponentLost) {return "Tie game!"};
+    return false;
 };
 
-export { checkWinner };
+function newCompetitors() {
+    const player = Player();
+    const opponent = Player();
+    const competitors = [player, opponent];
+    return competitors;
+};
+
+function getRandomCoordinate() {
+    return Math.floor(Math.random() * 100);
+};
+
+function getRandomOrientation() {
+    const number = Math.floor(Math.random() * 2);
+    if (number === 1) {return true};
+    return false;
+};
+
+export { checkWinner, newCompetitors, getRandomCoordinate, getRandomOrientation };
