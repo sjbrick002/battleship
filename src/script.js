@@ -152,7 +152,7 @@ function moveShipModel(e) {
             else {initializeFiringStage()};
         };        
     };
-    if (e.key === "q") {
+    if (e.key === "r") {
         if (!isShipVertical && homeBlockRefNumber + shipSizeArray[placedShipCount] * 10 -10 <= 99 || isShipVertical && (homeBlockRefNumber) % 10 <= 10 - shipSizeArray[placedShipCount]) {
             isShipVertical = !isShipVertical;
             removeShipModel();
@@ -255,8 +255,10 @@ function renderStartingPage() {
 
     const gameModeDisplay = document.createElement("p");
     gameModeDisplay.className = "game-mode-display";
+    gameModeDisplay.textContent = "Game Mode: ";
     const gameMode = document.createElement("span");
     gameMode.className = "game-mode";
+    gameMode.textContent = "Gunner";
     gameModeDisplay.appendChild(gameMode);
     initialBackground.appendChild(gameModeDisplay);
 
@@ -358,6 +360,46 @@ function renderBoard(boardTypeString) {
     return boardSection;
 };
 
+function renderHowToPlay() {
+    let i = 0
+    const gameInstructions = ["Welcome!</br></br>To start, press <span class='how-to-play-span'>space</span> to set your fleet on the home board!","Use <span class='how-to-play-span'>wasd</span> or <span class='how-to-play-span'>arrow</span> keys to move the ship model and the <span class='how-to-play-span'>r</span> button to flip its orientation.</br></br>When you are happy with its position, press <span class='how-to-play-span'>enter</span> to confirm it!","After setting your fleet on the board, it's time to start firing!</br></br>Using the <span class='how-to-play-span'>wasd</span> or <span class='how-to-play-span'>arrow</span> keys, press <span class='how-to-play-span'>f</span> to fire at target coordinates to try and sink you opponents ships before they sink yours; good luck!!!"];
+    function updateHowToPlayDisplay(element) {
+        element.innerHTML = gameInstructions[i];
+    };
+
+    const howToPlayDisplay = document.createElement("div");
+    howToPlayDisplay.className = "how-to-play-display";
+    const howToPlayDisplayPara = document.createElement("p");
+    howToPlayDisplayPara.textContent = "HOW TO PLAY";
+    const howToPlayDisplayDiv = document.createElement("div");
+    howToPlayDisplayDiv.className = "how-to-play-instrucitons";
+    const instructionsPara = document.createElement("p");
+    updateHowToPlayDisplay(instructionsPara);
+    const instructionControls = document.createElement("div");
+    instructionControls.className = "instruction-controls";
+    const backBtn = document.createElement("div");
+    backBtn.className = "instructions-btn";
+    backBtn.textContent = "<";
+    backBtn.addEventListener("click", function() {
+        if (i > 0) {i--};
+        updateHowToPlayDisplay(instructionsPara);
+    });
+    const forwardBtn = document.createElement("div");
+    forwardBtn.className = "instructions-btn";
+    forwardBtn.textContent = ">";
+    forwardBtn.addEventListener("click", function() {
+        if (i < gameInstructions.length) {i++};
+        updateHowToPlayDisplay(instructionsPara);
+    });
+    instructionControls.appendChild(backBtn);
+    instructionControls.appendChild(forwardBtn);
+    howToPlayDisplayDiv.appendChild(instructionsPara);
+    howToPlayDisplay.appendChild(howToPlayDisplayPara);
+    howToPlayDisplay.appendChild(howToPlayDisplayDiv);
+    howToPlayDisplay.appendChild(instructionControls);
+    return howToPlayDisplay;
+};
+
 function renderGamePanel() {
     const gamePanel = document.createElement("div");
     gamePanel.className = "game-panel";
@@ -374,20 +416,9 @@ function renderGamePanel() {
     const gamePanelRight = document.createElement("div");
     gamePanelRight.className = "game-panel-right";
 
-    
-    const controlsDisplay = document.createElement("div");
-    controlsDisplay.className = "controls-display";
-    const controlsDisplayPara = document.createElement("p");
-    controlsDisplayPara.textContent = "CONTROLS";
-    const controlsDisplayDiv = document.createElement("div");
-    const instructionsPara = document.createElement("p");
-    instructionsPara.textContent = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel asperiores minima ad modi aliquid sapiente. Magnam repellat ad //placeat? Quo exercitationem assumenda aliquid non nostrum magnam praesentium minus, est error.";
-    controlsDisplayDiv.appendChild(instructionsPara);
-    controlsDisplay.appendChild(controlsDisplayPara);
-    controlsDisplay.appendChild(controlsDisplayDiv);
 
     gamePanelRight.appendChild(renderBoard("targeting"));
-    gamePanelRight.appendChild(controlsDisplay);
+    gamePanelRight.appendChild(renderHowToPlay());
     gamePanel.appendChild(gamePanelRight);
 
     body.appendChild(gamePanel);
