@@ -1,28 +1,56 @@
 import { checkWinner, newCompetitors, getRandomCoordinate, getRandomOrientation } from "./gamePlay.js";
 import "./style.css";
 import whiteG from "./img/white-g.png";
-//import spaceMusic from "./sounds/391840__vabsounds__space.wav";
+import spaceMusic from "./sounds/391840__vabsounds__space.wav";
+import laserSound from "./sounds/339169__debsound__arcade-laser-014.wav";
 
 
 let competitors = [];
+let isMusicOn = false;
+let isFxOn = true;
 
 
 
 
-//const gameMusic = document.createElement("audio");
-//gameMusic.src = spaceMusic;
-//gameMusic.setAttribute("type", "audio/wav");
+const gameMusic = document.createElement("audio");
+gameMusic.src = spaceMusic;
+gameMusic.setAttribute("type", "audio/wav");
 
-//function playSound(sound, needsLoop = false) {
-//    if (sound.hasAttribute("muted")) {sound.removeAttribute("muted")};
-//    sound.setAttribute("autoplay", "");
-//    if (needsLoop) {sound.setAttribute("loop", "")};
-//};
+const firingSound = document.createElement("audio");
+firingSound.src = laserSound;
+firingSound.setAttribute("type", "audio/wav");
 
-//function stopSound(sound) {
-//    if (sound.hasAttribute("autoplay")) {sound.removeAttribute("autoplay")};
-//    sound.setAttribute("muted", "");
-//}
+function renderSoundOptions() {
+    const soundOptions = document.createElement("div");
+    soundOptions.className = "sound-options";
+    const musicLabel = document.createElement("label");
+    musicLabel.textContent = "Music";
+    musicLabel.addEventListener("click", function() {
+        isMusicOn = !isMusicOn;
+        if (!isMusicOn) {musicLabel.className = "strikethrough"}
+        else {musicLabel.className = ""};
+        if (isMusicOn) {
+            gameMusic.setAttribute("loop","");
+            gameMusic.play();
+        } else {
+            gameMusic.removeAttribute("loop");
+            gameMusic.pause();
+        };
+    });
+    const fxLabel = document.createElement("label");
+    fxLabel.textContent = "FX Sound";
+    fxLabel.addEventListener("click", function() {
+        isFxOn = !isFxOn;
+        if (!isFxOn) {fxLabel.className = "strikethrough"}
+        else {fxLabel.className = ""};
+    });
+    if (!isMusicOn) {musicLabel.className = "strikethrough"};
+    if (!isFxOn) {fxLabel.className = "strikethrough"};
+    soundOptions.appendChild(musicLabel);
+    soundOptions.appendChild(fxLabel);
+    body.appendChild(soundOptions);
+};
+
 
 
 
@@ -59,6 +87,10 @@ function moveTargetingMarker(e) {
     };
     if (e.key === "f" && !currentTargetBlock.classList.contains("firing")) {
         currentTargetBlock.classList.add("firing");
+        if (isFxOn) {
+            firingSound.currentTime = 0;
+            firingSound.play()
+        };
         const playerAttackResult = competitors[0].attack(targetingBlockRefNumber, competitors[1]);
         let currentOpponentTargetCoordinate = getRandomCoordinate();
         while (previousOpponentTargetCoordinates.includes(currentOpponentTargetCoordinate)) {
@@ -92,7 +124,6 @@ function moveTargetingMarker(e) {
             isShipVertical = false;
             clearElement(body);
             renderStartingPage();
-
         }
     };
 };
@@ -279,12 +310,7 @@ function renderStartingPage() {
     initialBackground.appendChild(opponentGallery);
 
     body.appendChild(initialBackground);
-
-
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////playSound(gameMusic, true);
+    renderSoundOptions();
 };
 
 function renderFleetDisplay(fleetOwnerString, commanderString) {
@@ -388,7 +414,7 @@ function renderHowToPlay() {
     forwardBtn.className = "instructions-btn";
     forwardBtn.textContent = ">";
     forwardBtn.addEventListener("click", function() {
-        if (i < gameInstructions.length) {i++};
+        if (i < 2) {i++};
         updateHowToPlayDisplay(instructionsPara);
     });
     instructionControls.appendChild(backBtn);
@@ -422,6 +448,7 @@ function renderGamePanel() {
     gamePanel.appendChild(gamePanelRight);
 
     body.appendChild(gamePanel);
+    renderSoundOptions();
 };
 
 renderStartingPage();
