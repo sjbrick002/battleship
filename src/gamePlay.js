@@ -4,7 +4,7 @@ function checkWinner(playersArray) {
     const playerLost = playersArray[0].isFleetDead();
     const opponentLost = playersArray[1].isFleetDead();
     if (playerLost) {return "Opponent wins!"};
-    if (opponentLost) {return "Player wins!"};
+    if (opponentLost) {return "You win!"};
     if (playerLost && opponentLost) {return "Tie game!"};
     return false;
 };
